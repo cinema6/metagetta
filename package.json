@@ -1,0 +1,30 @@
+{
+  "name": "metagetta",
+  "version": "0.0.0",
+  "description": "Library for fetching content metadata from around the web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cinema6/metagetta.git"
+  },
+  "keywords": [
+    "metadata",
+    "meta",
+    "youtube",
+    "vimeo",
+    "dailymotion",
+    "vast",
+    "iab",
+    "video",
+    "web"
+  ],
+  "author": "Cineam6, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cinema6/metagetta/issues"
+  },
+  "homepage": "https://github.com/cinema6/metagetta"
+}
