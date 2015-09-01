@@ -1142,19 +1142,23 @@ describe('fetchFromYouTube(options)', function() {
             uri1 = 'https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails&id=Nv7Ts4v5_Bs%2C1NlxTd8RxFA&key=12345';
             uri2 = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=1NlxTd8RxFA&key=abcde';
 
-            LiePromise.all([
-                fetchFromYouTube(options1).then(success, failure),
-                fetchFromYouTube(options2).then(success, failure),
-                fetchFromYouTube(options3).then(success, failure)
-            ]).then(done, done);
             process.nextTick(function() {
-                if (requestDeferreds[uri1]) {
-                    requestDeferreds[uri1].resolve({ body: response1 });
-                }
+                request.get.calls.reset();
+                LiePromise.all([
+                    fetchFromYouTube(options1).then(success, failure),
+                    fetchFromYouTube(options2).then(success, failure),
+                    fetchFromYouTube(options3).then(success, failure)
+                ]).then(done, done);
 
-                if (requestDeferreds[uri2]) {
-                    requestDeferreds[uri2].resolve({ body: response2 });
-                }
+                process.nextTick(function() {
+                    if (requestDeferreds[uri1]) {
+                        requestDeferreds[uri1].resolve({ body: response1 });
+                    }
+
+                    if (requestDeferreds[uri2]) {
+                        requestDeferreds[uri2].resolve({ body: response2 });
+                    }
+                });
             });
         });
 
