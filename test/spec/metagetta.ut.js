@@ -2,6 +2,9 @@ var metagetta = require('../../lib/metagetta');
 var LiePromise = require('lie');
 var extend = require('../../lib/utils/extend');
 
+var parseYouTubeURI = require('../../lib/uris/youtube');
+var fetchFromYouTube = require('../../lib/fetchers/youtube');
+
 describe('metagetta(uri, options)', function() {
     it('should exist', function() {
         expect(metagetta).toEqual(jasmine.any(Function));
@@ -17,6 +20,14 @@ describe('metagetta(uri, options)', function() {
         describe('pipeline', function() {
             it('should be an Array', function() {
                 expect(metagetta.pipeline).toEqual(jasmine.any(Array));
+            });
+
+            it('should be configured to fetch from sources', function() {
+                expect(metagetta.pipeline).toEqual([
+                    parseYouTubeURI,
+
+                    fetchFromYouTube
+                ]);
             });
         });
     });
