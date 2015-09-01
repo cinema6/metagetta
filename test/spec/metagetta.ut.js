@@ -5,6 +5,9 @@ var extend = require('../../lib/utils/extend');
 var parseYouTubeURI = require('../../lib/uris/youtube');
 var fetchFromYouTube = require('../../lib/fetchers/youtube');
 
+var parseVimeoURI = require('../../lib/uris/vimeo');
+var fetchFromVimeo = require('../../lib/fetchers/vimeo');
+
 describe('metagetta(uri, options)', function() {
     it('should exist', function() {
         expect(metagetta).toEqual(jasmine.any(Function));
@@ -25,8 +28,10 @@ describe('metagetta(uri, options)', function() {
             it('should be configured to fetch from sources', function() {
                 expect(metagetta.pipeline).toEqual([
                     parseYouTubeURI,
+                    parseVimeoURI,
 
-                    fetchFromYouTube
+                    fetchFromYouTube,
+                    fetchFromVimeo
                 ]);
             });
         });
