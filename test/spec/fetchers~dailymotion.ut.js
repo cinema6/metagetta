@@ -3,6 +3,7 @@
 var fetchFromDailymotion = require('../../lib/fetchers/dailymotion');
 var request = require('superagent');
 var LiePromise = require('lie');
+var htmlToText = require('../../lib/utils/html_to_text');
 
 describe('fetchFromVimeo(options)', function() {
     var requestDeferreds;
@@ -63,7 +64,7 @@ describe('fetchFromVimeo(options)', function() {
                     'hd1080'
                 ],
                 'created_time': 1438454421,
-                'description': 'Cats and water collide.',
+                'description': '<a class="link" rel="nofollow" target="_blank" href="http://www.popsugar.com/food/Starbucks-Pumpkin-Spice-Latte-Recipe-38272478"></a><p>Starbucks released its new Pumpkin Spice Latte</a>, now made with real pumpkin. But if you don\'t want to shell out several bucks every day to get your Fall fix, we hacked the recipe to figure out how to make our own version. Pumpkin spice and vanilla syrups combine with steamed milk and coffee to create a PSL that rivals Starbucks\'s. </p><br />',
                 'duration': 82,
                 'tags': [
                     'afv',
@@ -90,7 +91,7 @@ describe('fetchFromVimeo(options)', function() {
                 id: options.id,
                 uri: options.uri,
                 title: response.title,
-                description: response.description,
+                description: htmlToText(response.description),
                 duration: response.duration,
                 hd: true,
                 tags: response.tags,
