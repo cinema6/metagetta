@@ -321,10 +321,12 @@ describe('fetchFromYouTube(options)', function() {
                 ]
             };
 
-            fetchFromYouTube(options).then(success, failure).then(done, done);
             process.nextTick(function() {
-                Object.keys(requestDeferreds).forEach(function(uri) {
-                    requestDeferreds[uri].resolve({ body: response });
+                fetchFromYouTube(options).then(success, failure).then(done, done);
+                process.nextTick(function() {
+                    Object.keys(requestDeferreds).forEach(function(uri) {
+                        requestDeferreds[uri].resolve({ body: response });
+                    });
                 });
             });
         });
