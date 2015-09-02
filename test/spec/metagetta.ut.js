@@ -11,6 +11,8 @@ var fetchFromVimeo = require('../../lib/fetchers/vimeo');
 var parseDailymotionURI = require('../../lib/uris/dailymotion');
 var fetchFromDailymotion = require('../../lib/fetchers/dailymotion');
 
+var fetchAsVAST = require('../../lib/fetchers/vast');
+
 describe('metagetta(uri, options)', function() {
     it('should exist', function() {
         expect(metagetta).toEqual(jasmine.any(Function));
@@ -36,7 +38,8 @@ describe('metagetta(uri, options)', function() {
 
                     fetchFromYouTube,
                     fetchFromVimeo,
-                    fetchFromDailymotion
+                    fetchFromDailymotion,
+                    fetchAsVAST
                 ]);
             });
         });
