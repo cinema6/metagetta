@@ -157,7 +157,7 @@ describe('metagetta(uri, options)', function() {
                     error2 = new Error('Or me!');
                     error3 = new Error('I can\'t help either...');
 
-                    one.and.returnValue(LiePromise.reject(error1));
+                    one.and.throwError(error1);
                     two.and.returnValue(LiePromise.reject(error2));
                     three.and.returnValue(LiePromise.reject(error3));
 
