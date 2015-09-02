@@ -141,6 +141,8 @@ describe('metagetta(uri, options)', function() {
             });
 
             describe('if no functions fulfill', function() {
+                var error1, error2, error3;
+
                 beforeEach(function(done) {
                     success.calls.reset();
                     failure.calls.reset();
@@ -148,15 +150,21 @@ describe('metagetta(uri, options)', function() {
                     two.calls.reset();
                     three.calls.reset();
 
-                    one.and.returnValue(LiePromise.reject('Not me!'));
-                    two.and.returnValue(LiePromise.reject('Or me!'));
-                    three.and.returnValue(LiePromise.reject('I can\'t help either...'));
+                    error1 = new Error('Not me!');
+                    error2 = new Error('Or me!');
+                    error3 = new Error('I can\'t help either...');
+
+                    one.and.returnValue(LiePromise.reject(error1));
+                    two.and.returnValue(LiePromise.reject(error2));
+                    three.and.returnValue(LiePromise.reject(error3));
 
                     metagetta(config).then(success, failure).then(done, done);
                 });
 
                 it('should reject with an Error', function() {
                     expect(failure).toHaveBeenCalledWith(new Error('Could not find metadata for the specified resource.'));
+                    expect(failure.calls.mostRecent().args[0].reasons).toEqual([error1, error2, error3]);
+                    expect(failure.calls.mostRecent().args[0].options).toEqual(extend(config, { uri: undefined }));
                 });
             });
 
