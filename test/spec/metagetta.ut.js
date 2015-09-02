@@ -63,7 +63,7 @@ describe('metagetta(uri, options)', function() {
                 expect(result.pipeline).toEqual(metagetta.pipeline);
                 expect(result.pipeline).not.toBe(metagetta.pipeline);
 
-                expect(result.withConfig).toBe(metagetta.withConfig);
+                expect(result.withConfig).toEqual(jasmine.any(Function));
             });
 
             describe('when the returned function is called', function() {
@@ -85,6 +85,49 @@ describe('metagetta(uri, options)', function() {
 
                 it('should call each pipeline function with a combination of the global and local configs', function() {
                     expect(one).toHaveBeenCalledWith(extend(globalOptions, options));
+                });
+            });
+
+            describe('when the new instance\'s withConfig() method is called', function() {
+                var moreOptions;
+                var furtherResult;
+
+                beforeEach(function() {
+                    moreOptions = { fields: ['duration'] };
+                    furtherResult = result.withConfig(moreOptions);
+                });
+
+                it('should return another new metagetta instance', function() {
+                    expect(furtherResult).toEqual(jasmine.any(Function));
+                    expect(furtherResult.name).toBe('metagetta');
+
+                    expect(furtherResult.version).toBe(metagetta.version);
+                    expect(furtherResult.pipeline).toEqual(metagetta.pipeline);
+                    expect(furtherResult.pipeline).not.toBe(metagetta.pipeline);
+
+                    expect(furtherResult.withConfig).toEqual(jasmine.any(Function));
+                });
+
+                describe('and the returned function is called', function() {
+                    var one;
+                    var options;
+                    var success, failure;
+
+                    beforeEach(function(done) {
+                        options = { type: 'youtube', id: 'bLBSoC_2IY8' };
+
+                        one = jasmine.createSpy('one()').and.returnValue(LiePromise.resolve({}));
+                        furtherResult.pipeline = [one];
+
+                        success = jasmine.createSpy('success()');
+                        failure = jasmine.createSpy('failure()');
+
+                        furtherResult(options).then(success, failure).then(done, done);
+                    });
+
+                    it('should call each pipeline function with a combination of the global and local configs', function() {
+                        expect(one).toHaveBeenCalledWith(extend(globalOptions, moreOptions, options));
+                    });
                 });
             });
         });
