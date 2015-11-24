@@ -5,7 +5,7 @@ var LIBS = [
     'index.js',
     'lib/**/*.js'
 ];
-var CODE = LIBS.concat(TESTS);
+var CODE = LIBS.concat(TESTS).concat(['test/spec/**/*.node-ut.js', 'test/spec/**/*.browser-ut.js']);
 
 module.exports = function gruntfile(grunt) {
     var pkg = require('./package.json');
@@ -21,7 +21,7 @@ module.exports = function gruntfile(grunt) {
     grunt.initConfig({
         jasmine: {
             test: {
-                src: TESTS
+                src: TESTS.concat('test/spec/**/*.node-ut.js')
             }
         },
         watch: {
