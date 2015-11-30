@@ -101,7 +101,7 @@ describe('fetchFromInstagram(options)', function() {
             '_a.jpg","id":"11830955","full_name":"Taylor Swift"}}}';
         response = JSON.parse(mockApiResponse);
 
-        LiePromise.resolve().then(done);
+        process.nextTick(done);
     });
 
     afterEach(function(done) {
@@ -146,7 +146,7 @@ describe('fetchFromInstagram(options)', function() {
             });
         });
 
-        describe('when ffmpeg throws an error when trying to fetch metadata', function() {
+        describe('when ffmpeg successfully is able to fetch metadata', function() {
             beforeEach(function(done) {
                 getVideoMetadata.and.returnValue(LiePromise.resolve({
                     duration: 123
@@ -173,7 +173,7 @@ describe('fetchFromInstagram(options)', function() {
             });
         });
         
-        describe('when ffmpeg successfully is able to fetch metadata', function() {
+        describe('when ffmpeg throws an error when trying to fetch metadata', function() {
             beforeEach(function(done) {
                 getVideoMetadata.and.returnValue(LiePromise.reject('epic fail'));
                 result.then(done, done);
@@ -195,6 +195,23 @@ describe('fetchFromInstagram(options)', function() {
                     tags: [],
                     publishedTime: new Date(1438876747000)
                 });
+            });
+        });
+        
+        describe('checking if the video is hd', function() {
+            beforeEach(function(done) {
+                /* jshint camelcase:false */
+                response.data.videos.standard_resolution.height = 721;
+                /* jshint camelcase:true */
+                getVideoMetadata.and.returnValue(LiePromise.resolve({
+                    duration: 123
+                }));
+                result.then(done, done);
+            });
+            
+            it('should be able to occur', function() {
+                var result = success.calls.mostRecent().args[0];
+                expect(result.hd).toBe(true);
             });
         });
     });
