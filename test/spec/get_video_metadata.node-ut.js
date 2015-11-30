@@ -1,10 +1,19 @@
 var childProcess = require('child_process');
-var getVideoMetadata = require('../../lib/utils/get_video_metadata');
+var proxyquire = require('proxyquire');
+var getVideoMetadata;
 
 describe('getVideoMetadata', function() {
     var child;
     
     beforeEach(function() {
+        var ffprobeLib = {
+            path: '/some/path/to/ffprobe'
+        };
+        getVideoMetadata = proxyquire('../../lib/utils/get_video_metadata.js', {
+            'ffprobe-static': ffprobeLib,
+            
+            '@noCallThru': true
+        });
         child = {
             kill: jasmine.createSpy('kill()')
         };
@@ -15,7 +24,7 @@ describe('getVideoMetadata', function() {
     
     it('should spawn a child process with the correct command', function() {
         getVideoMetadata('video.mp4');
-        expect(childProcess.exec).toHaveBeenCalledWith('ffprobe -print_format json -loglevel error -show_entries format=duration -i video.mp4', jasmine.any(Function));
+        expect(childProcess.exec).toHaveBeenCalledWith('/some/path/to/ffprobe -print_format json -loglevel error -show_entries format=duration -i video.mp4', jasmine.any(Function));
     });
     
     it('should set a timeout', function() {
@@ -58,6 +67,18 @@ describe('getVideoMetadata', function() {
         getVideoMetadata('video.mp4').then(done.fail).catch(function(error) {
             expect(child.kill).toHaveBeenCalled();
             expect(error).toBe('metadata for the video could not be found');
+            done();
+        });
+    });
+    
+    it('should reject if the ffprobe dependency is not found', function(done) {
+        getVideoMetadata = proxyquire('../../lib/utils/get_video_metadata.js', {
+            'ffprobe-static': null,
+            
+            '@noCallThru': true
+        });
+        getVideoMetadata('video.mp4').then(done.fail).catch(function(error) {
+            expect(error).toBe('cannot proceed because ffprobe-static was not found');
             done();
         });
     });

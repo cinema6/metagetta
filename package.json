@@ -52,6 +52,9 @@
     "jsonp": "^0.2.0",
     "proxyquire-universal": "^1.0.8"
   },
+  "optionalDependencies": {
+      "ffprobe-static": "^1.1.0"
+  },
   "browser": {
     "./lib/utils/html_to_text.js": "./lib/utils/html_to_text--browser.js",
     "./lib/utils/get_video_metadata.js": "./lib/utils/get_video_metadata--browser.js",
