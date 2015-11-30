@@ -18,7 +18,8 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             { pattern: 'test/polyfill.js', watched: false },
-            { pattern: 'test/spec/**/*.ut.js', watched: false }
+            { pattern: 'test/spec/**/*.ut.js', watched: false },
+            { pattern: 'test/spec/**/*.browser-ut.js', watched: false }
         ],
 
 
@@ -30,7 +31,8 @@ module.exports = function(config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'test/polyfill.js': 'browserify',
-            'test/spec/**/*.ut.js': 'browserify'
+            'test/spec/**/*.ut.js': 'browserify',
+            'test/spec/**/*.browser-ut.js': 'browserify'
         },
 
 
@@ -69,7 +71,8 @@ module.exports = function(config) {
 
         browserify: {
             debug: true,
-            transform: ['brfs']
+            transform: ['brfs'],
+            plugin: ['proxyquire-universal']
         }
     });
 };

@@ -7,11 +7,12 @@ Metagetta is a library for fetching content metadata from around the web. Suppor
 * [Vimeo](https://vimeo.com/)
 * [Dailymotion](http://www.dailymotion.com/)
 * [IAB VAST Tag](http://www.iab.net/guidelines/508676/digitalvideo/vsuite/vast/vast_copy)
+* [Instagram Videos](https://www.instagram.com/)
 
 API
 ---
 ### metagetta(*uri*, [*options*])
-*uri* should be a valid URI from any of the supported sources. For example, a YouTube URI (https://www.youtube.com/watch?v=fPDYj3IMkRI), a Vimeo URI (https://vimeo.com/135288462), a Dailymotion URI (http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun) or a VAST tag (http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2.) *uri* can also be an ```Array``` of URIs (to batch calls.)
+*uri* should be a valid URI from any of the supported sources. For example, a YouTube URI (https://www.youtube.com/watch?v=fPDYj3IMkRI), a Vimeo URI (https://vimeo.com/135288462), a Dailymotion URI (http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun), a VAST tag (http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2.), or an Instagram URI (https://instagram.com/p/6DD1crjvG7/) *uri* can also be an ```Array``` of URIs (to batch calls.)
 
 *options* (optional) should be an object containing configuration options.
 
@@ -30,10 +31,11 @@ Options
 The following configuration options are valid:
 
 * **uri**: A URI from any of the supported sources.
-* **type**: The name of a source. Supported sources are ```youtube```, ```vimeo```, ```dailymotion``` or ```vast```.
+* **type**: The name of a source. Supported sources are ```youtube```, ```vimeo```, ```dailymotion```, ```vast```, or ```instagram```.
 * **id**: The ID of a piece of content. This does *not* apply to VAST videos.
 * **fields**: An ```Array``` of the only response fields that should be included. This is useful as it can potentially reduce the amount of [YouTube quota units](https://developers.google.com/youtube/v3/getting-started#quota) metagetta consumes.
 * **youtube.key**: A [YouTube API Key](https://developers.google.com/youtube/android/player/register#Create_API_Keys) (required to make calls against YouTube's Data API.)
+* **instagram.key**: An [Instagram API Client Key](https://instagram.com/developer/) (required to make calls against Instagram's API)
 
 Response
 --------
@@ -60,7 +62,8 @@ metagetta([
   'https://www.youtube.com/watch?v=fPDYj3IMkRI',
   'https://vimeo.com/135288462',
   'http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun',
-  'http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2'
+  'http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2',
+  'https://instagram.com/p/6DD1crjvG7/'
 ]).then(function(videos) {
   videos.forEach(function(video) {
     console.log(video.title + ' is ' + video.duration + ' seconds!');

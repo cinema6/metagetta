@@ -36,7 +36,7 @@ describe('fetchFromYouTube(options)', function() {
         };
 
         result = fetchFromYouTube(options).then(success, failure);
-        LiePromise.resolve().then(done);
+        process.nextTick(done);
     });
 
     afterEach(function(done) {
