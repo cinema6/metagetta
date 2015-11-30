@@ -14,4 +14,18 @@ describe('htmlToText(html)', function() {
     it('should convert the HTML into plain text', function() {
         expect(result).toBe(expected);
     });
+    
+    it('should convert anchor tags into plain text', function() {
+        html = '<a href="www.somewhere.com">Hello World</a>';
+        expected = 'Hello World';
+        result = htmlToText(html);
+        expect(result).toBe(expected);
+    });
+    
+    it('should work with a paragraph tag', function() {
+        html = '<p>Hello World</p>';
+        expected = 'Hello World';
+        result = htmlToText(html);
+        expect(result).toBe(expected);
+    });
 });

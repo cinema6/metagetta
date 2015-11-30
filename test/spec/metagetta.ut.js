@@ -14,6 +14,9 @@ var fetchFromDailymotion = require('../../lib/fetchers/dailymotion');
 var parseInstagramURI = require('../../lib/uris/instagram');
 var fetchFromInstagram = require('../../lib/fetchers/instagram');
 
+var parseWistiaURI = require('../../lib/uris/wistia');
+var fetchFromWistia = require('../../lib/fetchers/wistia');
+
 var fetchAsVAST = require('../../lib/fetchers/vast');
 
 describe('metagetta(uri, options)', function() {
@@ -39,11 +42,13 @@ describe('metagetta(uri, options)', function() {
                     parseVimeoURI,
                     parseDailymotionURI,
                     parseInstagramURI,
+                    parseWistiaURI,
 
                     fetchFromYouTube,
                     fetchFromVimeo,
                     fetchFromDailymotion,
                     fetchFromInstagram,
+                    fetchFromWistia,
                     fetchAsVAST
                 ]);
             });
