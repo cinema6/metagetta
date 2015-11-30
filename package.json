@@ -17,12 +17,13 @@
     "vimeo",
     "dailymotion",
     "instagram",
+    "wistia",
     "vast",
     "iab",
     "video",
     "web"
   ],
-  "author": "Cineam6, Inc.",
+  "author": "Reelcontent, Inc.",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cinema6/metagetta/issues"
