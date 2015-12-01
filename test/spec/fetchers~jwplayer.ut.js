@@ -207,6 +207,38 @@ describe('fetchFromJWPlayer(options)', function() {
         });
     });
 
+    describe('if only fields requiring the conversions endpoint are requested', function() {
+        beforeEach(function(done) {
+            requestDeferreds = {};
+            success.calls.reset();
+            failure.calls.reset();
+            request.get.calls.reset();
+            options.fields = ['hd'];
+
+            fetchFromJWPlayer(options).then(success, failure).then(done, done);
+
+            Object.keys(requestDeferreds).forEach(function(uri) {
+                if(uri.indexOf('conversions') !== -1) {
+                    requestDeferreds[uri].resolve({ body: conversionsResponse });
+                } else {
+                    requestDeferreds[uri].resolve({ body: videoResponse });
+                }
+            });
+        });
+        
+        it('should not make a request', function() {
+            var calls = request.get.calls.all();
+            expect(calls.length).toBe(1);
+            expect(calls[0].args[0]).toContain('conversions');
+        });
+        
+        it('should fulfill with the data', function() {
+            expect(success).toHaveBeenCalledWith({
+                hd: false
+            });
+        });
+    });
+
     describe('if some invalid fields are provided', function() {
         beforeEach(function(done) {
             requestDeferreds = {};
