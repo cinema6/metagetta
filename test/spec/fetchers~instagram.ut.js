@@ -104,10 +104,6 @@ describe('fetchFromInstagram(options)', function() {
         process.nextTick(done);
     });
 
-    afterEach(function(done) {
-        process.nextTick(done);
-    });
-
     it('should return a promise', function() {
         expect(result).toEqual(jasmine.any(LiePromise));
     });
