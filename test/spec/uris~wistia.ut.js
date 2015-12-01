@@ -30,10 +30,11 @@ describe('parseWistiaURI(options)', function() {
 
     describe('if there is no uri', function() {
         it('should throw an error', function() {
-            expect(function() { parseWistiaURI({}); }).toThrow();
-            expect(function() { parseWistiaURI({ type: 'wistia', id: '' }); }).toThrow();
-            expect(function() { parseWistiaURI({ type: '', id: 'ufGlBv8Z3NU' }); }).toThrow();
-            expect(function() { parseWistiaURI({ type: 'wistia', id: 'ufGlBv8Z3NU' }); }).toThrow();
+            var expectedError = new Error('Must specify a URI for Wistia videos');
+            expect(function() { parseWistiaURI({}); }).toThrow(expectedError);
+            expect(function() { parseWistiaURI({ type: 'wistia', id: '' }); }).toThrow(expectedError);
+            expect(function() { parseWistiaURI({ type: '', id: 'ufGlBv8Z3NU' }); }).toThrow(expectedError);
+            expect(function() { parseWistiaURI({ type: 'wistia', id: 'ufGlBv8Z3NU' }); }).toThrow(expectedError);
         });
     });
 
