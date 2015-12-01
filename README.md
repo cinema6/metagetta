@@ -9,11 +9,12 @@ Metagetta is a library for fetching content metadata from around the web. Suppor
 * [IAB VAST Tag](http://www.iab.net/guidelines/508676/digitalvideo/vsuite/vast/vast_copy)
 * [Instagram Videos](https://www.instagram.com/)
 * [Wistia Videos](http://wistia.com/hub)
+* [JWPlayer Videos](http://www.jwplayer.com/)
 
 API
 ---
 ### metagetta(*uri*, [*options*])
-*uri* should be a valid URI from any of the supported sources. For example, a YouTube URI (https://www.youtube.com/watch?v=fPDYj3IMkRI), a Vimeo URI (https://vimeo.com/135288462), a Dailymotion URI (http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun), a VAST tag (http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2.), an Instagram URI (https://instagram.com/p/6DD1crjvG7/), or a Wistia URI (https://cinema6.wistia.com/medias/9iqvphjp4u) *uri* can also be an ```Array``` of URIs (to batch calls.)
+*uri* should be a valid URI from any of the supported sources. For example, a YouTube URI (https://www.youtube.com/watch?v=fPDYj3IMkRI), a Vimeo URI (https://vimeo.com/135288462), a Dailymotion URI (http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun), a VAST tag (http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2.), an Instagram URI (https://instagram.com/p/6DD1crjvG7/), a Wistia URI (https://cinema6.wistia.com/medias/9iqvphjp4u), or a JWPlayer URI (https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn) *uri* can also be an ```Array``` of URIs (to batch calls.)
 
 *options* (optional) should be an object containing configuration options.
 
@@ -38,6 +39,8 @@ The following configuration options are valid:
 * **youtube.key**: A [YouTube API Key](https://developers.google.com/youtube/android/player/register#Create_API_Keys) (required to make calls against YouTube's Data API.)
 * **instagram.key**: An [Instagram API Client Key](https://instagram.com/developer/) (required to make calls against Instagram's API)
 * **wistia.key**: A [Wistia API Password](http://wistia.com/doc/data-api#making_requests) (required to make calls against Wistia's API)
+* **jwplayer.key**: A [JWPlayer API Key](http://apidocs.jwplayer.com/authentication.html) (required to make calls against JWPlayer's API)
+* **jwplayer.secret**: A [JWPlayer API Secret](http://apidocs.jwplayer.com/authentication.html) (also required to make calls against JWPlayer's API)
 
 Response
 --------
@@ -74,3 +77,7 @@ metagetta([
   console.error('There was a problem: ' + error);
 });
 ```
+
+Notes
+-------
+* As of now, JWPlayer metadata will not be retrievable in a browser environment
