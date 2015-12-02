@@ -48,7 +48,7 @@ describe('fetchFromYouTube(options)', function() {
     });
 
     it('should make a request to the youtube API', function() {
-        expect(request.get).toHaveBeenCalledWith('https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails&id=M-n5vol3CEE&key=uwhd493yt48397trg4637rgh7384r');
+        expect(request.get).toHaveBeenCalledWith('https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=M-n5vol3CEE&key=uwhd493yt48397trg4637rgh7384r');
     });
 
     describe('when the response is received', function() {
@@ -152,11 +152,18 @@ describe('fetchFromYouTube(options)', function() {
                             'definition': 'hd',
                             'caption': 'false',
                             'licensedContent': true
+                        },
+                        'statistics': {
+                            'viewCount': '5476044',
+                            'likeCount': '33626',
+                            'dislikeCount': '606',
+                            'favoriteCount': '0',
+                            'commentCount': '1274'
                         }
                     }
                 ]
             };
-            requestDeferreds['https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails&id=M-n5vol3CEE&key=uwhd493yt48397trg4637rgh7384r'].resolve({ body: response });
+            requestDeferreds['https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=M-n5vol3CEE&key=uwhd493yt48397trg4637rgh7384r'].resolve({ body: response });
 
             result.then(done, done);
         });
@@ -171,7 +178,8 @@ describe('fetchFromYouTube(options)', function() {
                 duration: 643,
                 hd: true,
                 tags: response.items[0].snippet.tags,
-                publishedTime: new Date(response.items[0].snippet.publishedAt)
+                publishedTime: new Date(response.items[0].snippet.publishedAt),
+                views: 5476044
             });
         });
     });
@@ -396,6 +404,60 @@ describe('fetchFromYouTube(options)', function() {
             expect(success).toHaveBeenCalledWith({
                 duration: 643,
                 hd: true
+            });
+        });
+    });
+
+    describe('if only statistics fields are requested', function() {
+        var response;
+
+        beforeEach(function(done) {
+            requestDeferreds = {};
+            success.calls.reset();
+            failure.calls.reset();
+            request.get.calls.reset();
+            options.fields = ['views'];
+
+            response = {
+                'kind': 'youtube#videoListResponse',
+                'etag': '\'sGDdEsjSJ_SnACpEvVQ6MtTzkrI/WmBAyJbG_asPSbqz6TOc5W37IOM\'',
+                'pageInfo': {
+                    'totalResults': 1,
+                    'resultsPerPage': 1
+                },
+                'items': [
+                    {
+                        'kind': 'youtube#video',
+                        'etag': '\'sGDdEsjSJ_SnACpEvVQ6MtTzkrI/eWxn-FzmGLT_88gc3Sb7tUksWtI\'',
+                        'id': 'M-n5vol3CEE',
+                        'statistics': {
+                            'viewCount': '5476044',
+                            'likeCount': '33626',
+                            'dislikeCount': '606',
+                            'favoriteCount': '0',
+                            'commentCount': '1274'
+                        }
+                    }
+                ]
+            };
+
+            process.nextTick(function() {
+                fetchFromYouTube(options).then(success, failure).then(done, done);
+                process.nextTick(function() {
+                    Object.keys(requestDeferreds).forEach(function(uri) {
+                        requestDeferreds[uri].resolve({ body: response });
+                    });
+                });
+            });
+        });
+
+        it('should only request the contentDetails part', function() {
+            expect(request.get).toHaveBeenCalledWith('https://www.googleapis.com/youtube/v3/videos?part=statistics&id=M-n5vol3CEE&key=uwhd493yt48397trg4637rgh7384r');
+        });
+
+        it('should respond with only the requested fields', function() {
+            expect(success).toHaveBeenCalledWith({
+                views: 5476044
             });
         });
     });
@@ -646,7 +708,7 @@ describe('fetchFromYouTube(options)', function() {
             expect(request.get.calls.count()).toBe(1);
         });
 
-        it('should resolve each promise seperately', function() {
+        it('should resolve each promise separately', function() {
             expect(success).toHaveBeenCalledWith({
                 title: response.items[0].snippet.title,
                 description: response.items[0].snippet.description,
@@ -780,6 +842,13 @@ describe('fetchFromYouTube(options)', function() {
                             'definition': 'hd',
                             'caption': 'false',
                             'licensedContent': true
+                        },
+                        'statistics': {
+                            'viewCount': '5476044',
+                            'likeCount': '33626',
+                            'dislikeCount': '606',
+                            'favoriteCount': '0',
+                            'commentCount': '1274'
                         }
                     },
                     {
@@ -862,6 +931,13 @@ describe('fetchFromYouTube(options)', function() {
                             'definition': 'hd',
                             'caption': 'false',
                             'licensedContent': true
+                        },
+                        'statistics': {
+                            'viewCount': '5476044',
+                            'likeCount': '33626',
+                            'dislikeCount': '606',
+                            'favoriteCount': '0',
+                            'commentCount': '1274'
                         }
                     }
                 ]
@@ -884,11 +960,11 @@ describe('fetchFromYouTube(options)', function() {
         });
 
         it('should only make one request', function() {
-            expect(request.get).toHaveBeenCalledWith('https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails&id=Nv7Ts4v5_Bs%2C1NlxTd8RxFA&key=uwhd493yt48397trg4637rgh7384r');
+            expect(request.get).toHaveBeenCalledWith('https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=Nv7Ts4v5_Bs%2C1NlxTd8RxFA&key=uwhd493yt48397trg4637rgh7384r');
             expect(request.get.calls.count()).toBe(1);
         });
 
-        it('should resolve each promise seperately', function() {
+        it('should resolve each promise separately', function() {
             expect(success).toHaveBeenCalledWith({
                 title: response.items[0].snippet.title,
                 description: response.items[0].snippet.description,
@@ -908,7 +984,8 @@ describe('fetchFromYouTube(options)', function() {
                 tags: response.items[0].snippet.tags,
                 publishedTime: new Date(response.items[0].snippet.publishedAt),
                 duration: 151,
-                hd: true
+                hd: true,
+                views: 5476044
             });
             expect(success.calls.count()).toBe(3);
         });
@@ -1111,6 +1188,13 @@ describe('fetchFromYouTube(options)', function() {
                             'definition': 'hd',
                             'caption': 'false',
                             'licensedContent': true
+                        },
+                        'statistics': {
+                            'viewCount': '5476044',
+                            'likeCount': '33626',
+                            'dislikeCount': '606',
+                            'favoriteCount': '0',
+                            'commentCount': '1274'
                         }
                     }
                 ]
@@ -1143,7 +1227,7 @@ describe('fetchFromYouTube(options)', function() {
             options2 = { type: 'youtube', id: '1NlxTd8RxFA', uri: 'https://www.youtube.com/watch?v=1NlxTd8RxFA', fields: ['duration', 'hd'], youtube: { key: 'abcde' } };
             options3 = { type: 'youtube', id: '1NlxTd8RxFA', uri: 'https://www.youtube.com/watch?v=1NlxTd8RxFA', youtube: { key: '12345' } };
 
-            uri1 = 'https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails&id=Nv7Ts4v5_Bs%2C1NlxTd8RxFA&key=12345';
+            uri1 = 'https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=Nv7Ts4v5_Bs%2C1NlxTd8RxFA&key=12345';
             uri2 = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=1NlxTd8RxFA&key=abcde';
 
             process.nextTick(function() {
@@ -1192,7 +1276,8 @@ describe('fetchFromYouTube(options)', function() {
                 tags: response1.items[1].snippet.tags,
                 publishedTime: new Date(response1.items[1].snippet.publishedAt),
                 duration: 351,
-                hd: true
+                hd: true,
+                views: 5476044
             });
 
             expect(success.calls.count()).toBe(3);
