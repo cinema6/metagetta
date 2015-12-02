@@ -55,6 +55,7 @@ The following response object will be provided no matter the source of the conte
 * **hd**: A ```Boolean``` indicating if the content is HD or not; for VAST, the highest-quality media file will be used
 * **tags**: An ```Array``` of video tags
 * **publishedTime**: A ```Date``` representing when the content was published/created
+* **views**: The number of views the video has (likes in the case of Instagram)
 
 Example
 -------
