@@ -57,8 +57,10 @@ module.exports = function gruntfile(grunt) {
             dist: {
                 src: 'index.js',
                 dest: './dist/metagetta.js',
-                browserifyOptions: {
-                    standalone: 'metagetta'
+                options: {
+                    browserifyOptions: {
+                        standalone: 'metagetta'
+                    }
                 }
             }
         },
