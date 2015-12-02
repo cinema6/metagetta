@@ -52,6 +52,32 @@ module.exports = function gruntfile(grunt) {
                     singleRun: true
                 }
             }
+        },
+        browserify: {
+            dist: {
+                src: 'index.js',
+                dest: './dist/metagetta.js',
+                browserifyOptions: {
+                    standalone: 'metagetta'
+                }
+            }
+        },
+        clean: {
+            build: ['dist']
+        },
+        uglify: {
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: './dist',
+                        src: '*.js',
+                        dest: './dist',
+                        extDot: 'last',
+                        ext: '.min.js'
+                    }
+                ]
+            }
         }
     });
 
@@ -73,4 +99,11 @@ module.exports = function gruntfile(grunt) {
             }
         }()));
     });
+
+    grunt.registerTask('build', [
+        'clean:build',
+        'karma:test',
+        'browserify:dist',
+        'uglify:dist'
+    ]);
 };
