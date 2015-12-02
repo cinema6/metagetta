@@ -137,7 +137,8 @@ describe('fetchFromInstagram(options)', function() {
                     duration: null,
                     hd: false,
                     tags: [],
-                    publishedTime: new Date(1438876747000)
+                    publishedTime: new Date(1438876747000),
+                    views: 1339638
                 });
             });
         });
@@ -164,7 +165,8 @@ describe('fetchFromInstagram(options)', function() {
                     duration: 123,
                     hd: false,
                     tags: [],
-                    publishedTime: new Date(1438876747000)
+                    publishedTime: new Date(1438876747000),
+                    views: 1339638
                 });
             });
         });
@@ -189,7 +191,8 @@ describe('fetchFromInstagram(options)', function() {
                     duration: null,
                     hd: false,
                     tags: [],
-                    publishedTime: new Date(1438876747000)
+                    publishedTime: new Date(1438876747000),
+                    views: 1339638
                 });
             });
         });

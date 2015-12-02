@@ -6,7 +6,8 @@ describe('fetchFromWistia(options)', function() {
     var requestDeferreds;
     var options;
     var success, failure;
-    var result, response;
+    var result;
+    var showResponse, statsResponse;
 
     beforeEach(function(done) {
         success = jasmine.createSpy('success()');
@@ -35,7 +36,7 @@ describe('fetchFromWistia(options)', function() {
             wistia: { key: 'and_peele' }
         };
 
-        var mockApiResponse = '{"id":15933042,"name":"Lenny Delivers Video","type":"Video","created":"2015-09-23T14:11:23+00:00","u' +
+        var mockShowResponse = '{"id":15933042,"name":"Lenny Delivers Video","type":"Video","created":"2015-09-23T14:11:23+00:00","u' +
             'pdated":"2015-09-23T14:13:56+00:00","duration":40.16,"hashed_id":"9iqvphjp4u","description":"<p>Chec' +
             'k out another video featuring Lenny at <a href=\\"http://wistia.com/product\\">wistia.com/product</a><' +
             '/p>","progress":1.0,"status":"ready","thumbnail":{"url":"https://embed-ssl.wistia.com/deliveries/692' +
@@ -56,7 +57,11 @@ describe('fetchFromWistia(options)', function() {
             'ght":540,"fileSize":6711589,"contentType":"video/mp4","type":"MdMp4VideoFile"},{"url":"http://embed.' +
             'wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.bin","width":960,"height":540,"fileSi' +
             'ze":212834,"contentType":"image/jpeg","type":"StillImageFile"}],"embedCode":""}';
-        response = JSON.parse(mockApiResponse);
+        var mockStatsResponse = '{"id":15933042,"hashed_id":"9iqvphjp4u","name":"Lenny Delivers Video","stats":{"' +
+            'pageLoads":1456,"visitors":67,"percentOfVisitorsClickingPlay":24,"plays":216,"averagePercentWatched"' +
+            ':23}}';
+        showResponse = JSON.parse(mockShowResponse);
+        statsResponse = JSON.parse(mockStatsResponse);
 
         result = fetchFromWistia(options).then(success, failure);
         process.nextTick(done);
@@ -73,6 +78,7 @@ describe('fetchFromWistia(options)', function() {
     describe('when the response is received', function() {
         beforeEach(function(done) {
             Object.keys(requestDeferreds).forEach(function(uri) {
+                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
                 requestDeferreds[uri].resolve({ body: response });
             });
 
@@ -89,7 +95,8 @@ describe('fetchFromWistia(options)', function() {
                 duration: 40.16,
                 hd: true,
                 tags: [],
-                publishedTime: new Date('2015-09-23T14:11:23+00:00')
+                publishedTime: new Date('2015-09-23T14:11:23+00:00'),
+                views: 1456
             });
         });
     });
@@ -127,6 +134,7 @@ describe('fetchFromWistia(options)', function() {
             fetchFromWistia(options).then(success, failure).then(done, done);
 
             Object.keys(requestDeferreds).forEach(function(uri) {
+                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
                 requestDeferreds[uri].resolve({ body: response });
             });
         });
@@ -160,6 +168,68 @@ describe('fetchFromWistia(options)', function() {
                 id: options.id,
                 uri: options.uri,
                 tags: []
+            });
+        });
+    });
+    
+    describe('if only fields requiring the medias show endpoint are requested', function() {
+        beforeEach(function(done) {
+            requestDeferreds = {};
+            success.calls.reset();
+            failure.calls.reset();
+            request.get.calls.reset();
+            options.fields = ['title', 'description', 'duration', 'hd', 'publishedTime'];
+
+            fetchFromWistia(options).then(success, failure).then(done, done);
+
+            Object.keys(requestDeferreds).forEach(function(uri) {
+                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
+                requestDeferreds[uri].resolve({ body: response });
+            });
+        });
+
+        it('should not make a request to the stats endpoint', function() {
+            var calls = request.get.calls.all();
+            expect(calls.length).toBe(1);
+            expect(calls[0].args[0]).not.toContain('stats');
+        });
+
+        it('should fulfill with the data', function() {
+            expect(success).toHaveBeenCalledWith({
+                title: 'Lenny Delivers Video',
+                description: 'Check out another video featuring Lenny at wistia.com/product',
+                duration: 40.16,
+                hd: true,
+                publishedTime: new Date('2015-09-23T14:11:23+00:00'),
+            });
+        });
+    });
+    
+    describe('if only fields requiring the medias stats endpoint are requested', function() {
+        beforeEach(function(done) {
+            requestDeferreds = {};
+            success.calls.reset();
+            failure.calls.reset();
+            request.get.calls.reset();
+            options.fields = ['views'];
+
+            fetchFromWistia(options).then(success, failure).then(done, done);
+
+            Object.keys(requestDeferreds).forEach(function(uri) {
+                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
+                requestDeferreds[uri].resolve({ body: response });
+            });
+        });
+
+        it('should only make a request to the stats endpoint', function() {
+            var calls = request.get.calls.all();
+            expect(calls.length).toBe(1);
+            expect(calls[0].args[0]).toContain('stats');
+        });
+
+        it('should fulfill with the data', function() {
+            expect(success).toHaveBeenCalledWith({
+                views: 1456
             });
         });
     });

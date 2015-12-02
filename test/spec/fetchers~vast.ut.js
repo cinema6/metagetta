@@ -125,7 +125,8 @@ describe('fetchAsVAST(options)', function() {
                         duration: 44,
                         hd: true,
                         tags: null,
-                        publishedTime: null
+                        publishedTime: null,
+                        views: null
                     });
                 });
             });
@@ -168,7 +169,8 @@ describe('fetchAsVAST(options)', function() {
                         duration: 15,
                         hd: false,
                         tags: null,
-                        publishedTime: null
+                        publishedTime: null,
+                        views: null
                     });
                 });
             });

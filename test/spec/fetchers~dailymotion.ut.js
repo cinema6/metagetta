@@ -46,7 +46,7 @@ describe('fetchFromVimeo(options)', function() {
     });
 
     it('should make a request for the video', function() {
-        expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title%2Cdescription%2Cduration%2Cavailable_formats%2Ctags%2Ccreated_time');
+        expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title%2Cdescription%2Cduration%2Cavailable_formats%2Ctags%2Ccreated_time%2Cviews_total');
     });
 
     describe('when the response is received', function() {
@@ -78,7 +78,8 @@ describe('fetchFromVimeo(options)', function() {
                     'fail',
                     'fall'
                 ],
-                'title': 'Cats Vs. Water'
+                'title': 'Cats Vs. Water',
+                'views_total': 123
             };
 
             requestDeferreds[request.get.calls.mostRecent().args[0]].resolve({ body: response });
@@ -95,7 +96,8 @@ describe('fetchFromVimeo(options)', function() {
                 duration: response.duration,
                 hd: true,
                 tags: response.tags,
-                publishedTime: new Date(response.created_time * 1000)
+                publishedTime: new Date(response.created_time * 1000),
+                views: 123
             });
         });
     });
