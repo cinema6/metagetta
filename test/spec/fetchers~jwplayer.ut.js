@@ -129,7 +129,8 @@ describe('fetchFromJWPlayer(options)', function() {
                 duration: 734.16,
                 hd: false,
                 tags: ['marco', 'polo'],
-                publishedTime: new Date(1444004242)
+                publishedTime: new Date(1444004242),
+                views: 217
             });
         });
     });
