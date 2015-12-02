@@ -1,6 +1,6 @@
 {
   "name": "metagetta",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Library for fetching content metadata from around the web.",
   "main": "index.js",
   "scripts": {
@@ -58,7 +58,7 @@
     "sha1": "^1.1.1"
   },
   "optionalDependencies": {
-      "ffprobe-static": "^1.1.0"
+    "ffprobe-static": "^1.1.0"
   },
   "browser": {
     "./lib/utils/html_to_text.js": "./lib/utils/html_to_text--browser.js",
