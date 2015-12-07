@@ -1,6 +1,6 @@
 {
   "name": "metagetta",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Library for fetching content metadata from around the web.",
   "main": "index.js",
   "scripts": {
