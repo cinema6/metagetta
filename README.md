@@ -10,11 +10,12 @@ Metagetta is a library for fetching content metadata from around the web. Suppor
 * [Instagram Videos](https://www.instagram.com/)
 * [Wistia Videos](http://wistia.com/hub)
 * [JWPlayer Videos](http://www.jwplayer.com/)
+* [Vzaar Videos](https://vzaar.com/)
 
 API
 ---
 ### metagetta(*uri*, [*options*])
-*uri* should be a valid URI from any of the supported sources. For example, a YouTube URI (https://www.youtube.com/watch?v=fPDYj3IMkRI), a Vimeo URI (https://vimeo.com/135288462), a Dailymotion URI (http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun), a VAST tag (http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2.), an Instagram URI (https://instagram.com/p/6DD1crjvG7/), a Wistia URI (https://cinema6.wistia.com/medias/9iqvphjp4u), or a JWPlayer URI (https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn) *uri* can also be an ```Array``` of URIs (to batch calls.)
+*uri* should be a valid URI from any of the supported sources. For example, a YouTube URI (https://www.youtube.com/watch?v=fPDYj3IMkRI), a Vimeo URI (https://vimeo.com/135288462), a Dailymotion URI (http://www.dailymotion.com/video/x30f1ti_the-iced-beverage-rap_fun), a VAST tag (http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2.), an Instagram URI (https://instagram.com/p/6DD1crjvG7/), a Wistia URI (https://cinema6.wistia.com/medias/9iqvphjp4u), a JWPlayer URI (https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn), or a Vzaar URI (http://vzaar.tv/5700429) *uri* can also be an ```Array``` of URIs (to batch calls.)
 
 *options* (optional) should be an object containing configuration options.
 
