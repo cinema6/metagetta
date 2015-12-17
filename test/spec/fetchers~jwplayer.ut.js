@@ -8,7 +8,7 @@ describe('fetchFromJWPlayer(options)', function() {
     var options;
     var success, failure;
     var result;
-    var videoResponse, conversionsResponse;
+    var response;
 
     beforeEach(function(done) {
         success = jasmine.createSpy('success()');
@@ -38,38 +38,22 @@ describe('fetchFromJWPlayer(options)', function() {
             '@noCallThru': true
         });
 
-        var mockVideoResponse = '{"status": "ok", "video": {"status": "ready", "sourceurl": null, "description": "Check out this FANT' +
-            'ASTIC video description.", "title": "tears_of_steel_720p.mov", "views": 217, "tags": "marco, polo", ' +
-            '"sourceformat": null, "mediatype": "video", "custom": {}, "duration": "734.16", "upload_session_id":' +
-            ' null, "link": "", "author": null, "key": "iGznZrKK", "error": null, "date": 1444004242, "md5": "882' +
-            '1bfe2b76c5c303ae0990a22f8802d", "sourcetype": "file", "size": "694582843"}}';
-        var mockConversionsResponse = '{"conversions": [{"status": "Ready", "template": {"required": true, "format": {"name": "Original", "' +
-            'key": "original"}, "id": 23160394, "key": "9aYQf7S8", "name": "Original"}, "mediatype": "video", "he' +
-            'ight": 534, "width": 1280, "link": {"path": "/originals/iGznZrKK.mov", "protocol": "http", "address"' +
-            ': "content.jwplatform.com"}, "filesize": "372178639", "key": "LBhIav89", "duration": "734.16"}, {"st' +
-            'atus": "Ready", "template": {"required": true, "format": {"name": "H.264 Baseline", "key": "mp4"}, "' +
-            'id": 23160395, "key": "VRCrJ2UT", "name": "H.264 320px"}, "mediatype": "video", "height": 134, "widt' +
-            'h": 320, "link": {"path": "/videos/iGznZrKK-VRCrJ2UT.mp4", "protocol": "http", "address": "content.j' +
-            'wplatform.com"}, "filesize": "35656619", "key": "rI6GSEIx", "duration": "734.16"}, {"status": "Ready' +
-            '", "template": {"required": false, "format": {"name": "H.264 Baseline", "key": "mp4"}, "id": 2316039' +
-            '6, "key": "5zfAA76q", "name": "H.264 480px"}, "mediatype": "video", "height": 200, "width": 480, "li' +
-            'nk": {"path": "/videos/iGznZrKK-5zfAA76q.mp4", "protocol": "http", "address": "content.jwplatform.co' +
-            'm"}, "filesize": "52350626", "key": "VeExWAeN", "duration": "734.16"}, {"status": "Ready", "template' +
-            '": {"required": false, "format": {"name": "H.264 Baseline", "key": "mp4"}, "id": 23160397, "key": "I' +
-            '4VbAGB7", "name": "H.264 720px"}, "mediatype": "video", "height": 300, "width": 720, "link": {"path"' +
-            ': "/videos/iGznZrKK-I4VbAGB7.mp4", "protocol": "http", "address": "content.jwplatform.com"}, "filesi' +
-            'ze": "69906156", "key": "orGONy0I", "duration": "734.16"}, {"status": "Ready", "template": {"require' +
-            'd": false, "format": {"name": "H.264 Baseline", "key": "mp4"}, "id": 23160398, "key": "j9Ry6qY7", "n' +
-            'ame": "H.264 1280px"}, "mediatype": "video", "height": 534, "width": 1280, "link": {"path": "/videos' +
-            '/iGznZrKK-j9Ry6qY7.mp4", "protocol": "http", "address": "content.jwplatform.com"}, "filesize": "1540' +
-            '86336", "key": "3RtQ4Wqd", "duration": "734.16"}, {"status": "Ready", "template": {"required": true,' +
-            ' "format": {"name": "AAC", "key": "aac"}, "id": 23160400, "key": "5H7OqgbG", "name": "AAC Audio"}, "' +
-            'mediatype": "audio", "height": -1, "width": -1, "link": {"path": "/videos/iGznZrKK-5H7OqgbG.m4a", "p' +
-            'rotocol": "http", "address": "content.jwplatform.com"}, "filesize": "10404467", "key": "26Qn5Wbq", "' +
-            'duration": "734.11"}], "status": "ok", "total": 6, "limit": 50, "offset": 0}';
+        var mockResponse = '{"playlist": [{"sources": [{"type": "application/vnd.apple.mpegurl", "file": "//content.jwplatform.c' +
+            'om/manifests/iGznZrKK.m3u8"}, {"height": 134, "width": 320, "file": "//content.jwplatform.com/videos' +
+            '/iGznZrKK-VRCrJ2UT.mp4", "duration": 734, "label": "H.264 320px", "type": "video/mp4"}, {"height": 2' +
+            '00, "width": 480, "file": "//content.jwplatform.com/videos/iGznZrKK-5zfAA76q.mp4", "duration": 734, ' +
+            '"label": "H.264 480px", "type": "video/mp4"}, {"height": 300, "width": 720, "file": "//content.jwpla' +
+            'tform.com/videos/iGznZrKK-I4VbAGB7.mp4", "duration": 734, "label": "H.264 720px", "type": "video/mp4' +
+            '"}, {"height": 534, "width": 1280, "file": "//content.jwplatform.com/videos/iGznZrKK-j9Ry6qY7.mp4", ' +
+            '"duration": 734, "label": "H.264 1280px", "type": "video/mp4"}, {"height": -1, "width": -1, "file": ' +
+            '"//content.jwplatform.com/videos/iGznZrKK-5H7OqgbG.m4a", "duration": 734, "label": "AAC Audio", "typ' +
+            'e": "audio/mp4"}], "tracks": [{"kind": "thumbnails", "file": "//assets-jpcust.jwpsrv.com/strips/iGzn' +
+            'ZrKK-120.vtt"}], "mediaid": "iGznZrKK", "description": "Check out this FANTASTIC video description."' +
+            ', "pubdate": 1444004242, "title": "tears_of_steel_720p.mov", "link": "//content.jwplatform.com/previ' +
+            'ews/iGznZrKK", "image": "//content.jwplatform.com/thumbs/iGznZrKK-720.jpg", "tags": "marco, polo", "' +
+            'custom": {}}]}';
 
-        videoResponse = JSON.parse(mockVideoResponse);
-        conversionsResponse = JSON.parse(mockConversionsResponse);
+        response = JSON.parse(mockResponse);
 
         jasmine.clock().install();
         jasmine.clock().mockDate(new Date(1448924740123));
@@ -77,11 +61,7 @@ describe('fetchFromJWPlayer(options)', function() {
         options = {
             uri: 'https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn',
             type: 'jwplayer',
-            id: 'iGznZrKK',
-            jwplayer: {
-                key: 'alicia',
-                secret: 'ssshhh'
-            }
+            id: 'iGznZrKK'
         };
 
         result = fetchFromJWPlayer(options).then(success, failure);
@@ -96,24 +76,15 @@ describe('fetchFromJWPlayer(options)', function() {
         expect(result).toEqual(jasmine.any(LiePromise));
     });
 
-    it('should make a request to V1 of JWPlayer\'s API', function() {
+    it('should make a request to JWPlayer\'s feeds endpoint', function() {
         var videoRequest = request.get.calls.all()[0].args[0];
-        expect(videoRequest).toBe('https://api.jwplatform.com/v1/videos/show?api_format=json&api_key=alicia&api_timestamp=1448924740&api_nonce=12345678&video_key=iGznZrKK&api_signature=01bba34fdb86e7e4f938d0d4dd821383b742f9b0');
+        expect(videoRequest).toBe('https://content.jwplatform.com/feeds/iGznZrKK.json');
     });
     
-    it('should make a request to JWPlayer\'s conversions enpoint', function() {
-        var videoRequest = request.get.calls.all()[1].args[0];
-        expect(videoRequest).toBe('https://api.jwplatform.com/v1/videos/conversions/list?api_format=json&api_key=alicia&api_timestamp=1448924740&api_nonce=12345678&video_key=iGznZrKK&api_signature=01bba34fdb86e7e4f938d0d4dd821383b742f9b0');
-    });
-
-    describe('when the responses are received', function() {
+    describe('when the response is received', function() {
         beforeEach(function(done) {
             Object.keys(requestDeferreds).forEach(function(uri) {
-                if(uri.indexOf('conversions') !== -1) {
-                    requestDeferreds[uri].resolve({ body: conversionsResponse });
-                } else {
-                    requestDeferreds[uri].resolve({ body: videoResponse });
-                }
+                requestDeferreds[uri].resolve({ body: response });
             });
 
             result.then(done, done);
@@ -126,11 +97,11 @@ describe('fetchFromJWPlayer(options)', function() {
                 uri: 'https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn',
                 title: 'tears_of_steel_720p.mov',
                 description: 'Check out this FANTASTIC video description.',
-                duration: 734.16,
+                duration: 734,
                 hd: false,
                 tags: ['marco', 'polo'],
                 publishedTime: new Date(1444004242),
-                views: 217
+                views: null
             });
         });
     });
@@ -168,17 +139,13 @@ describe('fetchFromJWPlayer(options)', function() {
             fetchFromJWPlayer(options).then(success, failure).then(done, done);
 
             Object.keys(requestDeferreds).forEach(function(uri) {
-                if(uri.indexOf('conversions') !== -1) {
-                    requestDeferreds[uri].resolve({ body: conversionsResponse });
-                } else {
-                    requestDeferreds[uri].resolve({ body: videoResponse });
-                }
+                requestDeferreds[uri].resolve({ body: response });
             });
         });
 
         it('should respond with only those fields', function() {
             expect(success).toHaveBeenCalledWith({
-                duration: 734.16,
+                duration: 734,
                 tags: ['marco', 'polo']
             });
         });
@@ -204,38 +171,6 @@ describe('fetchFromJWPlayer(options)', function() {
                 type: 'jwplayer',
                 id: 'iGznZrKK',
                 uri: 'https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn'
-            });
-        });
-    });
-
-    describe('if only fields requiring the conversions endpoint are requested', function() {
-        beforeEach(function(done) {
-            requestDeferreds = {};
-            success.calls.reset();
-            failure.calls.reset();
-            request.get.calls.reset();
-            options.fields = ['hd'];
-
-            fetchFromJWPlayer(options).then(success, failure).then(done, done);
-
-            Object.keys(requestDeferreds).forEach(function(uri) {
-                if(uri.indexOf('conversions') !== -1) {
-                    requestDeferreds[uri].resolve({ body: conversionsResponse });
-                } else {
-                    requestDeferreds[uri].resolve({ body: videoResponse });
-                }
-            });
-        });
-        
-        it('should not make a request', function() {
-            var calls = request.get.calls.all();
-            expect(calls.length).toBe(1);
-            expect(calls[0].args[0]).toContain('conversions');
-        });
-        
-        it('should fulfill with the data', function() {
-            expect(success).toHaveBeenCalledWith({
-                hd: false
             });
         });
     });
