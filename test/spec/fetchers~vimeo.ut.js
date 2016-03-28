@@ -100,7 +100,11 @@ describe('fetchFromVimeo(options)', function() {
                 hd: true,
                 tags: response[0].tags.split(/,\s*/),
                 publishedTime: new Date(2015, 7, 27),
-                views: 203389
+                views: 203389,
+                thumbnails: {
+                    small: 'https://i.vimeocdn.com/video/532653570_100x75.jpg',
+                    large: 'https://i.vimeocdn.com/video/532653570_640.jpg'
+                }
             });
         });
     });
