@@ -5,7 +5,7 @@ var request = require('superagent');
 var LiePromise = require('lie');
 var htmlToText = require('../../lib/utils/html_to_text');
 
-describe('fetchFromVimeo(options)', function() {
+describe('fetchFromDailymotion(options)', function() {
     var requestDeferreds;
     var options;
     var success, failure;
@@ -46,7 +46,7 @@ describe('fetchFromVimeo(options)', function() {
     });
 
     it('should make a request for the video', function() {
-        expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title%2Cdescription%2Cduration%2Cavailable_formats%2Ctags%2Ccreated_time%2Cviews_total');
+        expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title%2Cdescription%2Cduration%2Cavailable_formats%2Ctags%2Ccreated_time%2Cviews_total%2Cthumbnail_120_url%2Cthumbnail_url&ssl_assets=1');
     });
 
     describe('when the response is received', function() {
@@ -79,7 +79,9 @@ describe('fetchFromVimeo(options)', function() {
                     'fall'
                 ],
                 'title': 'Cats Vs. Water',
-                'views_total': 123
+                'views_total': 123,
+                'thumbnail_120_url': 'https://s2-ssl.dmcdn.net/MwnaC/x120-Jo2.jpg',
+                'thumbnail_url': 'https://s2-ssl.dmcdn.net/MwnaC.jpg'
             };
 
             requestDeferreds[request.get.calls.mostRecent().args[0]].resolve({ body: response });
@@ -97,7 +99,11 @@ describe('fetchFromVimeo(options)', function() {
                 hd: true,
                 tags: response.tags,
                 publishedTime: new Date(response.created_time * 1000),
-                views: 123
+                views: 123,
+                thumbnails: {
+                    small: 'https://s2-ssl.dmcdn.net/MwnaC/x120-Jo2.jpg',
+                    large: 'https://s2-ssl.dmcdn.net/MwnaC.jpg'
+                }
             });
         });
     });
@@ -164,7 +170,7 @@ describe('fetchFromVimeo(options)', function() {
         });
 
         it('should only request those fields', function() {
-            expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title%2Cavailable_formats%2Ctags');
+            expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title%2Cavailable_formats%2Ctags&ssl_assets=1');
         });
 
         it('should respond with that subset', function() {
@@ -221,7 +227,7 @@ describe('fetchFromVimeo(options)', function() {
         });
 
         it('should be ignored', function() {
-            expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title');
+            expect(request.get).toHaveBeenCalledWith('https://api.dailymotion.com/video/x30080c?fields=title&ssl_assets=1');
             expect(success).toHaveBeenCalledWith({
                 id: options.id,
                 title: response.title
