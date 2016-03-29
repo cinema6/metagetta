@@ -179,7 +179,11 @@ describe('fetchFromYouTube(options)', function() {
                 hd: true,
                 tags: response.items[0].snippet.tags,
                 publishedTime: new Date(response.items[0].snippet.publishedAt),
-                views: 5476044
+                views: 5476044,
+                thumbnails: {
+                    small: 'https://i.ytimg.com/vi/M-n5vol3CEE/default.jpg',
+                    large: 'https://i.ytimg.com/vi/M-n5vol3CEE/maxresdefault.jpg'
+                }
             });
         });
     });
@@ -985,7 +989,11 @@ describe('fetchFromYouTube(options)', function() {
                 publishedTime: new Date(response.items[0].snippet.publishedAt),
                 duration: 151,
                 hd: true,
-                views: 5476044
+                views: 5476044,
+                thumbnails: {
+                    small: 'https://i.ytimg.com/vi/Nv7Ts4v5_Bs/default.jpg',
+                    large: 'https://i.ytimg.com/vi/Nv7Ts4v5_Bs/maxresdefault.jpg'
+                }
             });
             expect(success.calls.count()).toBe(3);
         });
@@ -1277,7 +1285,11 @@ describe('fetchFromYouTube(options)', function() {
                 publishedTime: new Date(response1.items[1].snippet.publishedAt),
                 duration: 351,
                 hd: true,
-                views: 5476044
+                views: 5476044,
+                thumbnails: {
+                    small: 'https://i.ytimg.com/vi/1NlxTd8RxFA/default.jpg',
+                    large: 'https://i.ytimg.com/vi/1NlxTd8RxFA/maxresdefault.jpg'
+                }
             });
 
             expect(success.calls.count()).toBe(3);
