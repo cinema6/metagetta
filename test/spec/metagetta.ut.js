@@ -23,6 +23,9 @@ var fetchFromJWPlayer = require('../../lib/fetchers/jwplayer');
 var parseVzaarURI = require('../../lib/uris/vzaar');
 var fetchFromVzaar = require('../../lib/fetchers/vzaar');
 
+var parseFacebookURI = require('../../lib/uris/facebook');
+var fetchFromFacebook = require('../../lib/fetchers/facebook');
+
 var fetchAsVAST = require('../../lib/fetchers/vast');
 
 describe('metagetta(uri, options)', function() {
@@ -51,6 +54,7 @@ describe('metagetta(uri, options)', function() {
                     parseWistiaURI,
                     parseJWPlayerURI,
                     parseVzaarURI,
+                    parseFacebookURI,
 
                     fetchFromYouTube,
                     fetchFromVimeo,
@@ -59,6 +63,7 @@ describe('metagetta(uri, options)', function() {
                     fetchFromWistia,
                     fetchFromJWPlayer,
                     fetchFromVzaar,
+                    fetchFromFacebook,
                     fetchAsVAST
                 ]);
             });
