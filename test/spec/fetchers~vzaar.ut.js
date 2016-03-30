@@ -85,7 +85,11 @@ describe('fetchFromVzaar(options)', function() {
                 hd: false,
                 tags: null,
                 publishedTime: null,
-                views: 51
+                views: 51,
+                thumbnails: {
+                    small: 'https://view.vzaar.com/5700429/thumb',
+                    large: 'https://view.vzaar.com/5700429/thumb'
+                }
             });
         });
     });
@@ -141,7 +145,7 @@ describe('fetchFromVzaar(options)', function() {
             success.calls.reset();
             failure.calls.reset();
             jsonp.calls.reset();
-            options.fields = ['type', 'id', 'uri'];
+            options.fields = ['type', 'id', 'uri', 'thumbnails'];
 
             fetchFromVzaar(options).then(success, failure).then(done, done);
         });
@@ -154,7 +158,11 @@ describe('fetchFromVzaar(options)', function() {
             expect(success).toHaveBeenCalledWith({
                 type: 'vzaar',
                 id: '5700429',
-                uri: 'http://vzaar/tv/5700429'
+                uri: 'http://vzaar/tv/5700429',
+                thumbnails: {
+                    small: 'https://view.vzaar.com/5700429/thumb',
+                    large: 'https://view.vzaar.com/5700429/thumb'
+                }
             });
         });
     });

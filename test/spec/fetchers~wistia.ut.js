@@ -7,7 +7,7 @@ describe('fetchFromWistia(options)', function() {
     var options;
     var success, failure;
     var result;
-    var showResponse, statsResponse;
+    var showResponse, statsResponse, oEmbedResponse;
 
     beforeEach(function(done) {
         success = jasmine.createSpy('success()');
@@ -60,12 +60,35 @@ describe('fetchFromWistia(options)', function() {
         var mockStatsResponse = '{"id":15933042,"hashed_id":"9iqvphjp4u","name":"Lenny Delivers Video","stats":{"' +
             'pageLoads":1456,"visitors":67,"percentOfVisitorsClickingPlay":24,"plays":216,"averagePercentWatched"' +
             ':23}}';
+        var mockOEmbedResponse = '{"version":"1.0","type":"video","html":"<iframe src=\\"//fast.wistia.net/embed/' +
+            'iframe/9iqvphjp4u\\" allowtransparency=\\"true\\" frameborder=\\"0\\" scrolling=\\"no\\" class=\\"wi' +
+            'stia_embed\\" name=\\"wistia_embed\\" allowfullscreen mozallowfullscreen webkitallowfullscreen oallo' +
+            'wfullscreen msallowfullscreen width=\\"960\\" height=\\"540\\"></iframe>\\n<script src=\\"//fast.wis' +
+            'tia.net/assets/external/E-v1.js\\" async></script>","width":960,"height":540,"provider_name":"Wistia' +
+            ', Inc.","provider_url":"http://wistia.com","title":"Lenny Delivers Video","thumbnail_url":"https://e' +
+            'mbed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x5' +
+            '40","thumbnail_width":960,"thumbnail_height":540,"duration":40.207}';
         showResponse = JSON.parse(mockShowResponse);
         statsResponse = JSON.parse(mockStatsResponse);
+        oEmbedResponse = JSON.parse(mockOEmbedResponse);
 
         result = fetchFromWistia(options).then(success, failure);
         process.nextTick(done);
     });
+
+    function resolveDeferredRequests() {
+        Object.keys(requestDeferreds).forEach(function(uri) {
+            var response;
+            if(uri.indexOf('stats') !== -1) {
+                response = statsResponse;
+            } else if(uri.indexOf('oembed') !== -1) {
+                response = oEmbedResponse;
+            } else {
+                response = showResponse;
+            }
+            requestDeferreds[uri].resolve({ body: response });
+        });
+    }
 
     it('should return a LiePromise', function() {
         expect(result).toEqual(jasmine.any(LiePromise));
@@ -77,11 +100,7 @@ describe('fetchFromWistia(options)', function() {
 
     describe('when the response is received', function() {
         beforeEach(function(done) {
-            Object.keys(requestDeferreds).forEach(function(uri) {
-                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
-                requestDeferreds[uri].resolve({ body: response });
-            });
-
+            resolveDeferredRequests();
             result.then(done, done);
         });
 
@@ -92,11 +111,15 @@ describe('fetchFromWistia(options)', function() {
                 uri: options.uri,
                 title: 'Lenny Delivers Video',
                 description: 'Check out another video featuring Lenny at wistia.com/product',
-                duration: 40.16,
+                duration: 40.207,
                 hd: true,
                 tags: [],
                 publishedTime: new Date('2015-09-23T14:11:23+00:00'),
-                views: 1456
+                views: 1456,
+                thumbnails: {
+                    small: 'https://embed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x540',
+                    large: 'https://embed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x540'
+                }
             });
         });
     });
@@ -133,15 +156,12 @@ describe('fetchFromWistia(options)', function() {
 
             fetchFromWistia(options).then(success, failure).then(done, done);
 
-            Object.keys(requestDeferreds).forEach(function(uri) {
-                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
-                requestDeferreds[uri].resolve({ body: response });
-            });
+            resolveDeferredRequests();
         });
 
         it('should respond with only those fields', function() {
             expect(success).toHaveBeenCalledWith({
-                duration: 40.16,
+                duration: 40.207,
                 tags: []
             });
         });
@@ -178,14 +198,11 @@ describe('fetchFromWistia(options)', function() {
             success.calls.reset();
             failure.calls.reset();
             request.get.calls.reset();
-            options.fields = ['title', 'description', 'duration', 'hd', 'publishedTime'];
+            options.fields = ['description', 'hd', 'publishedTime'];
 
             fetchFromWistia(options).then(success, failure).then(done, done);
 
-            Object.keys(requestDeferreds).forEach(function(uri) {
-                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
-                requestDeferreds[uri].resolve({ body: response });
-            });
+            resolveDeferredRequests();
         });
 
         it('should not make a request to the stats endpoint', function() {
@@ -196,9 +213,7 @@ describe('fetchFromWistia(options)', function() {
 
         it('should fulfill with the data', function() {
             expect(success).toHaveBeenCalledWith({
-                title: 'Lenny Delivers Video',
                 description: 'Check out another video featuring Lenny at wistia.com/product',
-                duration: 40.16,
                 hd: true,
                 publishedTime: new Date('2015-09-23T14:11:23+00:00'),
             });
@@ -215,10 +230,7 @@ describe('fetchFromWistia(options)', function() {
 
             fetchFromWistia(options).then(success, failure).then(done, done);
 
-            Object.keys(requestDeferreds).forEach(function(uri) {
-                var response = (uri.indexOf('stats') !== -1) ? statsResponse : showResponse;
-                requestDeferreds[uri].resolve({ body: response });
-            });
+            resolveDeferredRequests();
         });
 
         it('should only make a request to the stats endpoint', function() {
@@ -230,6 +242,37 @@ describe('fetchFromWistia(options)', function() {
         it('should fulfill with the data', function() {
             expect(success).toHaveBeenCalledWith({
                 views: 1456
+            });
+        });
+    });
+
+    describe('if only fields requiring the oembed endpoint are requested', function() {
+        beforeEach(function(done) {
+            requestDeferreds = {};
+            success.calls.reset();
+            failure.calls.reset();
+            request.get.calls.reset();
+            options.fields = ['title', 'duration', 'thumbnails'];
+
+            fetchFromWistia(options).then(success, failure).then(done, done);
+
+            resolveDeferredRequests();
+        });
+
+        it('should only make a request to the stats endpoint', function() {
+            var calls = request.get.calls.all();
+            expect(calls.length).toBe(1);
+            expect(calls[0].args[0]).toContain('oembed');
+        });
+
+        it('should fulfill with the data', function() {
+            expect(success).toHaveBeenCalledWith({
+                title: 'Lenny Delivers Video',
+                duration: 40.207,
+                thumbnails: {
+                    small: 'https://embed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x540',
+                    large: 'https://embed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x540'
+                }
             });
         });
     });

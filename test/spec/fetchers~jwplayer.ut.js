@@ -101,7 +101,11 @@ describe('fetchFromJWPlayer(options)', function() {
                 hd: false,
                 tags: ['marco', 'polo'],
                 publishedTime: new Date(1444004242),
-                views: null
+                views: null,
+                thumbnails: {
+                    small: 'https://content.jwplatform.com/thumbs/iGznZrKK-320.jpg',
+                    large: 'https://content.jwplatform.com/thumbs/iGznZrKK-720.jpg'
+                }
             });
         });
     });
@@ -157,7 +161,7 @@ describe('fetchFromJWPlayer(options)', function() {
             success.calls.reset();
             failure.calls.reset();
             request.get.calls.reset();
-            options.fields = ['type', 'id', 'uri'];
+            options.fields = ['type', 'id', 'uri', 'thumbnails'];
 
             fetchFromJWPlayer(options).then(success, failure).then(done, done);
         });
@@ -170,7 +174,11 @@ describe('fetchFromJWPlayer(options)', function() {
             expect(success).toHaveBeenCalledWith({
                 type: 'jwplayer',
                 id: 'iGznZrKK',
-                uri: 'https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn'
+                uri: 'https://content.jwplatform.com/previews/iGznZrKK-n5DiyUyn',
+                thumbnails: {
+                    small: 'https://content.jwplatform.com/thumbs/iGznZrKK-320.jpg',
+                    large: 'https://content.jwplatform.com/thumbs/iGznZrKK-720.jpg'
+                }
             });
         });
     });

@@ -138,7 +138,11 @@ describe('fetchFromInstagram(options)', function() {
                     hd: false,
                     tags: [],
                     publishedTime: new Date(1438876747000),
-                    views: 1339638
+                    views: 1339638,
+                    thumbnails: {
+                        small: 'https://scontent.cdninstagram.com/hphotos-xft1/t51.2885-15/s150x150/e15/11821147_104753706542520_2033718459_n.jpg',
+                        large: 'https://scontent.cdninstagram.com/hphotos-xft1/t51.2885-15/e15/11821147_104753706542520_2033718459_n.jpg'
+                    }
                 });
             });
         });
@@ -166,7 +170,11 @@ describe('fetchFromInstagram(options)', function() {
                     hd: false,
                     tags: [],
                     publishedTime: new Date(1438876747000),
-                    views: 1339638
+                    views: 1339638,
+                    thumbnails: {
+                        small: 'https://scontent.cdninstagram.com/hphotos-xft1/t51.2885-15/s150x150/e15/11821147_104753706542520_2033718459_n.jpg',
+                        large: 'https://scontent.cdninstagram.com/hphotos-xft1/t51.2885-15/e15/11821147_104753706542520_2033718459_n.jpg'
+                    }
                 });
             });
         });
@@ -192,7 +200,11 @@ describe('fetchFromInstagram(options)', function() {
                     hd: false,
                     tags: [],
                     publishedTime: new Date(1438876747000),
-                    views: 1339638
+                    views: 1339638,
+                    thumbnails: {
+                        small: 'https://scontent.cdninstagram.com/hphotos-xft1/t51.2885-15/s150x150/e15/11821147_104753706542520_2033718459_n.jpg',
+                        large: 'https://scontent.cdninstagram.com/hphotos-xft1/t51.2885-15/e15/11821147_104753706542520_2033718459_n.jpg'
+                    }
                 });
             });
         });

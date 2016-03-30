@@ -126,7 +126,11 @@ describe('fetchAsVAST(options)', function() {
                         hd: true,
                         tags: null,
                         publishedTime: null,
-                        views: null
+                        views: null,
+                        thumbnails: {
+                            small: null,
+                            large: null
+                        }
                     });
                 });
             });
@@ -170,7 +174,11 @@ describe('fetchAsVAST(options)', function() {
                         hd: false,
                         tags: null,
                         publishedTime: null,
-                        views: null
+                        views: null,
+                        thumbnails: {
+                            small: null,
+                            large: null
+                        }
                     });
                 });
             });

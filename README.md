@@ -11,6 +11,7 @@ Metagetta is a library for fetching content metadata from around the web. Suppor
 * [Wistia Videos](http://wistia.com/hub)
 * [JWPlayer Videos](http://www.jwplayer.com/)
 * [Vzaar Videos](https://vzaar.com/)
+* [Facebook Videos](https://developers.facebook.com/docs/plugins/embedded-video-player)
 
 API
 ---
@@ -42,6 +43,8 @@ The following configuration options are valid:
 * **wistia.key**: A [Wistia API Password](http://wistia.com/doc/data-api#making_requests) (required to make calls against Wistia's API)
 * **jwplayer.key**: A [JWPlayer API Key](http://apidocs.jwplayer.com/authentication.html) (required to make calls against JWPlayer's API)
 * **jwplayer.secret**: A [JWPlayer API Secret](http://apidocs.jwplayer.com/authentication.html) (also required to make calls against JWPlayer's API)
+* **facebook.key**: A [Facebook Application](https://developers.facebook.com/) id (required to make calls against Facebook's API)
+* **facebook.secret**: A [Facebook Application](https://developers.facebook.com/) secret (also required to make calls against Facebook's API)
 
 Response
 --------
@@ -57,6 +60,8 @@ The following response object will be provided no matter the source of the conte
 * **tags**: An ```Array``` of video tags
 * **publishedTime**: A ```Date``` representing when the content was published/created
 * **views**: The number of views the video has (likes in the case of Instagram)
+* **thumbnails.small**: Url of a small thumbnail
+* **thumbnails.large**: Url of a large thumbnail
 
 Example
 -------
