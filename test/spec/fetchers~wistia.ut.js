@@ -146,6 +146,29 @@ describe('fetchFromWistia(options)', function() {
         });
     });
 
+    describe('if no wistia key is specified', function() {
+        beforeEach(function(done) {
+            delete options.wistia;
+            result = fetchFromWistia(options).then(success, failure).then(done, done.fail);
+            resolveDeferredRequests();
+        });
+
+        it('should only respond with fields which do not require a key', function() {
+            expect(success).toHaveBeenCalledWith({
+                type: 'wistia',
+                id: options.id,
+                uri: options.uri,
+                title: 'Lenny Delivers Video',
+                duration: 40.207,
+                tags: [],
+                thumbnails: {
+                    small: 'https://embed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x540',
+                    large: 'https://embed-ssl.wistia.com/deliveries/6928fcba8355e38de4d95863a659e1de23cb2071.jpg?image_crop_resized=960x540'
+                }
+            });
+        });
+    });
+
     describe('if a subset of fields are requested', function() {
         beforeEach(function(done) {
             requestDeferreds = {};
@@ -191,7 +214,7 @@ describe('fetchFromWistia(options)', function() {
             });
         });
     });
-    
+
     describe('if only fields requiring the medias show endpoint are requested', function() {
         beforeEach(function(done) {
             requestDeferreds = {};
@@ -219,7 +242,7 @@ describe('fetchFromWistia(options)', function() {
             });
         });
     });
-    
+
     describe('if only fields requiring the medias stats endpoint are requested', function() {
         beforeEach(function(done) {
             requestDeferreds = {};
@@ -259,7 +282,7 @@ describe('fetchFromWistia(options)', function() {
             resolveDeferredRequests();
         });
 
-        it('should only make a request to the stats endpoint', function() {
+        it('should only make a request to the oembed endpoint', function() {
             var calls = request.get.calls.all();
             expect(calls.length).toBe(1);
             expect(calls[0].args[0]).toContain('oembed');
